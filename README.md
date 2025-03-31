@@ -8,7 +8,7 @@
 - [Story](#story)
 - [Requirement](#requirement)
 - [Technologies Implemented](#technologies-implemented)
-  - [Step 1: Adding modules into MultiLayer Switch and Router](#step-1-adding-modules-into-multilayer-switch-and-router)
+  - [Step 1: Adding required modules into MultiLayer Switch and Router](#step-1-adding-required-modules-into-multilayer-switch-and-router)
   - [Step 2: Adding the prerequisite device into the network topology](#step-2-adding-the-prerequisite-device-into-the-network-topology)
   - [Step 3: Configuring Switch of each department to their respective name](#step-3-configuring-switch-of-each-department-to-their-respective-name)
       - [Apply this command to all department](#apply-this-command-to-all-department)
@@ -81,13 +81,16 @@ Provided a base network of 172.16.1.0, carry out subnetting to allocate the corr
 
 ---
 
-## Step 1: Adding modules into MultiLayer Switch and Router
+## Step 1: Adding required modules into MultiLayer Switch and Router
 
 - Adding HWIC-2T Module so the device is Serial Cable Supported
 ![Serial Cable](/assets/step1_1.png)
 
 - Adding AC-POWER-SUPPLY Module so the device can be powered on
 ![power supply](/assets/step1_2.png)
+
+- Checking DCE is supported on the cable and change the clock rate to 64000
+![DCE Check and change clock rate 64000](/assets/step1_3.png)
 
 ## Step 2: Adding the prerequisite device into the network topology
 
