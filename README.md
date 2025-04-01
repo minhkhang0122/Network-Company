@@ -409,7 +409,7 @@ switchport port-security violation shutdown
             <p>255.255.255.252</p>
         </td>
         <td>
-            <p>172.16.2.3.145  to 172.16.3.146</p>
+            <p>172.16.3.145 to 172.16.3.146</p>
         </td>
         <td>
             <p>172.16.3.147</p>
