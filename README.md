@@ -613,11 +613,10 @@ ip route 0.0.0.0 0.0.0.0 s0/2/1 70
 
 ## Final test Connectivity
 - Ping from different department
-  ![Department](/assets/department.png)
-
+![Department](/assets/department.png)
 
 - Use SSH to access Router
- ![SSH](/assets/SSH.png)
+![SSH](/assets/SSH.png)
 
 - Ping over the Internet and NAT Translation table
 ![Ping over the Internet](/assets/Ping%20over%20NAT.png)
