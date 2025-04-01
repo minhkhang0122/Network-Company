@@ -511,8 +511,8 @@ network 172.16.3.144 0.0.0.3 area 0
 network 172.16.3.152 0.0.0.3 area 0
 
 -> Chang these 2 IP aswell
-network 195.136.17.0 0.0.0.3 area 0
-network 195.136.17.4 0.0.0.3 area 0
+network 195.136.xx.xx 0.0.0.3 area 0
+network 195.136.xx.xx 0.0.0.3 area 0
 ```
 
 ## Step 10 Assign Static IP to DHCP server, DNS Server, Server Room PC and configure DHCP, DNS
