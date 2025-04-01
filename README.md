@@ -521,7 +521,7 @@ network 195.136.xx.xx 0.0.0.3 area 0
 ![SV PC](/assets/Step10_SVPC.png)
 ![DNS](/assets/Step10_DNS.png)
 
-- After this we starting configuring DHCP to automatically assign IP to end-host
+- After this we will configure DHCP to automatically assign IPs to end-host
 ![DHCP Pool configure](/assets/Step10_DHCPPool.png)
 ![DNS server name](/assets/Step10_DNSDomain.png)
   
