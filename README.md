@@ -592,9 +592,6 @@ int s0/2/0
 ip nat outside
 ```
 
-```
-
-```
 
 - After finishing configuring NAT you must configure Static Route to Core Router and MultiLayer Switch
 
