@@ -23,12 +23,18 @@
     - [Router and L3 Switch Subnet](#router-and-l3-switch-subnet)
     - [Between the Routers and ISPs](#between-the-routers-and-isps)
   - [Step 8: After that we assign IP to the device](#step-8-after-that-we-assign-ip-to-the-device)
+  - [Step 9: OSPF Configuration in MultiLayerSwitch, Core Router and ISP Router](#step-9-ospf-configuration-in-multilayerswitch-core-router-and-isp-router)
+  - [Step 10 Assign Static IP to DHCP server, DNS Server, Server Room PC and configure DHCP, DNS](#step-10-assign-static-ip-to-dhcp-server-dns-server-server-room-pc-and-configure-dhcp-dns)
+  - [Step 11 Configuring Inter-VLAN Routing(SVI) on both MultiLayerSwitch](#step-11-configuring-inter-vlan-routingsvi-on-both-multilayerswitch)
+  - [Step 12 Configure Wireless AC](#step-12-configure-wireless-ac)
+  - [Step 13 Configure PAT and ACL on Core Router](#step-13-configure-pat-and-acl-on-core-router)
+  - [Final test Connectivity](#final-test-connectivity)
 
 ---
 
 # Overview of the Network Topology
 
-
+![alt text](/assets/overview.png)
 
 # Story
 
@@ -472,3 +478,147 @@ switchport port-security violation shutdown
 
 
 ---
+
+
+## Step 9: OSPF Configuration in MultiLayerSwitch, Core Router and ISP Router
+![MultiLayerSwitch1](/assets/MultiLayerSW1OSPF.png)
+![MultiLayerSwitch2](/assets/MultiLayerSW2OSPF.png)
+![Router 1](/assets/RouterOSPF.png)
+![Router 2](/assets/Router2OSPF.png)
+
+```
+For both Switch
+ip routing 
+router ospf 10
+router-id [x.x.x.x]
+network 172.16.1.0 0.0.0.127 area 0
+network 172.16.1.128 0.0.0.127 area 0
+network 172.16.2.0 0.0.0.127 area 0
+network 172.16.2.128 0.0.0.127 area 0
+network 172.16.3.0 0.0.0.127 area 0
+network 172.16.3.0 0.0.0.15 area 0
+
+-> Do note that you need to change these 2 IP
+network 172.16.3.xxx 0.0.0.3 area 0
+network 172.16.3.xxx 0.0.0.3 area 0
+```
+
+```
+router ospf 10
+router-id [x.x.x.x]
+
+network 172.16.3.144 0.0.0.3 area 0
+network 172.16.3.152 0.0.0.3 area 0
+
+-> Chang these 2 IP aswell
+network 195.136.17.0 0.0.0.3 area 0
+network 195.136.17.4 0.0.0.3 area 0
+```
+
+## Step 10 Assign Static IP to DHCP server, DNS Server, Server Room PC and configure DHCP, DNS
+- Configure Static IP on DHCP Server, DNS Server, Server Room PC
+![DCHP](/assets/Step10_DCHP.png)
+![SV PC](/assets/Step10_SVPC.png)
+![DNS](/assets/Step10_DNS.png)
+
+- After this we starting configuring DHCP to automatically assign IP to end-host
+![DHCP Pool configure](/assets/Step10_DHCPPool.png)
+![DNS server name](/assets/Step10_DNSDomain.png)
+  
+## Step 11 Configuring Inter-VLAN Routing(SVI) on both MultiLayerSwitch
+- Before doing this, you must have each department VLAN in the VLAN table
+- Using 'show ip vlan brief' => To see if you have any VLAN configured
+- If not, the VLAN interface will not run
+
+![SVI Configuring](/assets/Step11_SVI.png)
+
+```
+int vlan 10
+ip address 172.16.1.1 255.255.255.128
+ip helper-address 172.16.3.130
+
+int vlan 20
+ip address 172.16.1.129 255.255.255.128
+ip helper-address 172.16.3.130
+no shut
+exit
+
+int vlan 30
+ip address 172.16.2.1 255.255.255.128
+ip helper-address 172.16.3.130
+no shut
+exit
+
+int vlan 40
+ip address 172.16.2.129 255.255.255.128
+ip helper-address 172.16.3.130
+no shut
+exit
+
+int vlan 50
+ip address 172.16.3.1 255.255.255.128
+ip helper-address 172.16.3.130
+no shut
+exit
+
+int vlan 60
+ip address 172.16.3.129 255.255.255.240
+ip helper-address 172.16.3.130
+no shut
+exit
+```
+
+## Step 12 Configure Wireless AC
+- If you do not remember how to configure Wireless AC click this [link](https://github.com/minhkhang0122/SOHO)
+![alt text](/assets/Step12_AC.png)
+
+## Step 13 Configure PAT and ACL on Core Router
+![NAT configure Router 1](/assets/Step13_NAT.png)
+![NAT configure Router 2](/assets/Step13_ACLNAT.png)
+```
+ip nat inside source list 1 int se0/2/0 overload
+ip nat inside source list 1 int se0/2/1 overload
+access-list 1 permit 172.16.1.0 0.0.0.127
+access-list 1 permit 172.16.1.128 0.0.0.127
+access-list 1 permit 172.16.2.0 0.0.0.127
+access-list 1 permit 172.16.2.128 0.0.0.127
+access-list 1 permit 172.16.3.0 0.0.0.127
+access-list 1 permit 172.16.3.128 0.0.0.15
+int range g0/0-1
+ip nat inside 
+int s0/2/1
+ip nat outside
+int s0/2/0
+ip nat outside
+```
+
+```
+
+```
+
+- After finishing configuring NAT you must configure Static Route to Core Router and MultiLayer Switch
+
+```
+-> This is for both MultilayerSwitch
+-> Cable may vary
+ip route 0.0.0.0 0.0.0.0 g1/0/1
+ip route 0.0.0.0 0.0.0.0 g1/0/2 70
+
+
+-> This is for both Core Router
+-> Cable may vary
+ip route 0.0.0.0 0.0.0.0 s0/2/0
+ip route 0.0.0.0 0.0.0.0 s0/2/1 70
+```
+
+## Final test Connectivity
+- Ping from different department
+  ![Department](/assets/department.png)
+
+
+- Use SSH to access Router
+ ![SSH](/assets/SSH.png)
+
+- Ping over the Internet and NAT Translation table
+![Ping over the Internet](/assets/Ping%20over%20NAT.png)
+![NAT table](/assets/NATtable.png)
